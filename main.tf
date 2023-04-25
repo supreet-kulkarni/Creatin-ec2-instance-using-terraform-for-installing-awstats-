@@ -131,12 +131,24 @@ resource "aws_instance" "web_server" {
   security_groups = [aws_security_group.allow_web.id]
   key_name = "webkey-1"
   user_data = <<-EOF
-  #!/bin/bash
-  echo "*** Installing apache2"
-  sudo apt update -y
-  sudo apt install apache2 -y
-  echo "*** Completed Installing apache2"
-  EOF
+                     #!/bin/bash
+                     sudo su 
+                     apt update
+                     apt install apache2 -y
+                     wget http://prdownloads.sourceforge.net/awstats/awstats-7.3.tar.gz
+                     tar -xvzf awstats-7.3.tar.gz
+                     cd awstats-7.3/
+                     cd wwwroot/
+                     cp -r icon /var/www/html/
+                     chown www-data:www-data -R /var/www/html/icon/
+                     a2enmod cgi
+                     service apache2 restart
+                     mv cgi-bin awstat
+                     chown www-data:www-data -R awstat
+                     mv awstat /usr/lib/cgi-bin
+                     cd /usr/lib/cgi-bin/awstat
+                     cp awstats.model.conf awstats.linux.conf
+              EOF
   tags = {
     Name = "webserver"
   }
