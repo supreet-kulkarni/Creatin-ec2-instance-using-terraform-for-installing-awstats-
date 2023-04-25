@@ -130,12 +130,13 @@ resource "aws_instance" "web_server" {
   subnet_id = "${aws_subnet.dev-public-1.id}"
   security_groups = [aws_security_group.allow_web.id]
   key_name = "webkey-1"
-  user_data = <<EOF
-                     #!/bin/bash
-                     sudo su
-                     apt update
-                     apt install apache2 -y
-            EOF
+  user_data = <<-EOF
+  #!/bin/bash
+  echo "*** Installing apache2"
+  sudo apt update -y
+  sudo apt install apache2 -y
+  echo "*** Completed Installing apache2"
+  EOF
   tags = {
     Name = "webserver"
   }
