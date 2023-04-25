@@ -125,7 +125,7 @@ resource "aws_security_group" "allow_web" {
 
 # Creating EC2 instances in public subnets
 resource "aws_instance" "web_server" {
-  ami           = "ami-074dc0a6f6c764218"
+  ami           = "ami-062df10d14676e201"
   instance_type = "t2.micro"
   subnet_id = "${aws_subnet.dev-public-1.id}"
   security_groups = [aws_security_group.allow_web.id]
