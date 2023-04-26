@@ -148,7 +148,12 @@ resource "aws_instance" "web_server" {
                      mv awstat /usr/lib/cgi-bin
                      cd /usr/lib/cgi-bin/awstat
                      cp awstats.model.conf awstats.linux.conf
-              EOF
+                     sed -i 's|LogFile="/var/log/httpd/mylog.log"|LogFile=" /var/log/apache2/access.log"|' awstats.linux.conf
+                     sed -i 's|SiteDomain=""|SiteDomain="test.com" |' awstats.linux.conf
+                     sed -i 's|AllowToUpdateStatsFromBrowser=0|AllowToUpdateStatsFromBrowser=1|' awstats.linux.conf
+                     cd
+                     /usr/bin/perl /usr/lib/cgi-bin/awstat/awstats.pl -config=linux -update
+                     EOF
   tags = {
     Name = "webserver"
   }
